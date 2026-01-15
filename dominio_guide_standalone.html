@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material de Apoio | Domínio Atendimento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #19547b;
+            --secondary: #ffd89b;
+            --foreground: #ffffff;
+            --background: #faf8f5;
+            --muted: #e8e4df;
+            --muted-foreground: #6b6b6b;
+            --border: #e8e4df;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #19547b, #ffd89b);
+            color: var(--foreground);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(25, 84, 123, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 2rem;
+        }
+
+        .header-box {
+            glass: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1.5rem;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icon {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.05em;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Card */
+        .card {
+            background: rgba(25, 84, 123, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(25, 84, 123, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .card.expanded {
+            background: rgba(25, 84, 123, 0.25);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            flex: 1;
+        }
+
+        .card-chevron {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card.expanded .card-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Card Content */
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-top: 0;
+        }
+
+        .card.expanded .card-content {
+            max-height: 500px;
+            margin-top: 1rem;
+        }
+
+        .sub-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sub-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
+        }
+
+        .sub-item-icon {
+            font-size: 1rem;
+        }
+
+        .sub-item-text {
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: rgba(25, 84, 123, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(25, 84, 123, 0.15);
+            border-radius: 1.875rem;
+            max-width: 42rem;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: rgba(25, 84, 123, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 1.875rem 1.875rem 0 0;
+        }
+
+        .modal-header-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .modal-header-icon {
+            font-size: 2rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: #f5f1ed;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-close-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: #f5f1ed;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 0.25rem;
+        }
+
+        .step-text {
+            color: #f5f1ed;
+            line-height: 1.6;
+        }
+
+        .tutorial-link {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tutorial-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tutorial-button:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        /* Scrollbar */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(25, 84, 123, 0.3);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(25, 84, 123, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-box glass">
+                <div class="header-icon">📋</div>
+                <div class="header-title">MATERIAL DE APOIO | PATRIMÔNIO</div>
+            </div>
+        </header>
+
+        <!-- Grid de Cards -->
+        <div class="grid">
+            <!-- Card 1: Parâmetros Iniciais (Expandido) -->
+            <div class="card expanded" onclick="toggleCard(this, 0)">
+                <div class="card-header">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-title">Parâmetros Iniciais</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(0, event)">
+                        <div class="sub-item-icon">📋</div>
+                        <div class="sub-item-text">Controle > Parâmetros</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Importação dos Cadastros Iniciais -->
+            <div class="card" onclick="toggleCard(this, 1)">
+                <div class="card-header">
+                    <div class="card-icon">📥</div>
+                    <div class="card-title">Importação dos Cadastros</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(1, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Controle > Empresas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Cadastro dos Bens -->
+            <div class="card" onclick="toggleCard(this, 2)">
+                <div class="card-header">
+                    <div class="card-icon">📦</div>
+                    <div class="card-title">Cadastro dos Bens</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(2, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Arquivos > Bens</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Importação dos Bens (Via Planilha) -->
+            <div class="card" onclick="toggleCard(this, 3)">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">Importação Bens (Planilha)</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(3, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Acessar Passo a Passo</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Cálculo -->
+            <div class="card" onclick="toggleCard(this, 4)">
+                <div class="card-header">
+                    <div class="card-icon">🧮</div>
+                    <div class="card-title">Cálculo (Depreciação)</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(4, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Processos > Calcular</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Relatórios -->
+            <div class="card" onclick="toggleCard(this, 5)">
+                <div class="card-header">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">Relatórios</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(5, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Depreciação Fiscal</div>
+                    </div>
+                    <div class="sub-item" onclick="openModal(6, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">CIAP</div>
+                    </div>
+                    <div class="sub-item" onclick="openModal(7, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Crédito PIS e COFINS</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7: Baixa de Bens -->
+            <div class="card" onclick="toggleCard(this, 6)">
+                <div class="card-header">
+                    <div class="card-icon">🗑️</div>
+                    <div class="card-title">Baixa de Bens</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(8, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Processos > Baixas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8: Integração Escrita Fiscal -->
+            <div class="card" onclick="toggleCard(this, 7)">
+                <div class="card-header">
+                    <div class="card-icon">🔗</div>
+                    <div class="card-title">Integração Escrita Fiscal</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(9, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Crédito de ICMS</div>
+                    </div>
+                    <div class="sub-item" onclick="openModal(10, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Crédito PIS e COFINS</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9: Integração Contabilidade -->
+            <div class="card" onclick="toggleCard(this, 8)">
+                <div class="card-header">
+                    <div class="card-icon">💼</div>
+                    <div class="card-title">Integração Contabilidade</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(11, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Processos > Integração</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 10: Bloqueio -->
+            <div class="card" onclick="toggleCard(this, 9)">
+                <div class="card-header">
+                    <div class="card-icon">🔒</div>
+                    <div class="card-title">Bloqueio</div>
+                    <div class="card-chevron">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="sub-item" onclick="openModal(12, event)">
+                        <div class="sub-item-icon">📄</div>
+                        <div class="sub-item-text">Controle > Fechamento</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-header-content">
+                    <div class="modal-header-icon" id="modalIcon">📋</div>
+                    <h2 id="modalTitle">Título</h2>
+                </div>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg class="modal-close-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const modalData = [
+            {
+                title: 'Parâmetros Iniciais',
+                icon: '⚙️',
+                steps: [
+                    'Acesse Controle > Parâmetros',
+                    'Informe a data de início dos cálculos',
+                    'Informe exceções',
+                    'Informe dados e exceções da aba ICMS',
+                    'Informe dados e exceções da aba PIS e COFINS',
+                    'Informe os dados de Ganhos de Capital em sua aba',
+                    'Configure a contabilização da parte do ativo'
+                ]
+            },
+            {
+                title: 'Importação dos Cadastros Iniciais',
+                icon: '📥',
+                steps: [
+                    'Acesse Controle > Empresas',
+                    'Clique em [Importação]',
+                    'Clique em [Importar dados] da opção Patrimônio',
+                    'Selecione todos os itens da esquerda',
+                    'Selecione a empresa padrão desejada da direita'
+                ]
+            },
+            {
+                title: 'Cadastro dos Bens',
+                icon: '📦',
+                steps: [
+                    'Acesse Arquivos > Bens',
+                    'Informe os campos',
+                    'OBS: Se ao importar a nota fiscal, o CFOP e acumulador forem de Ativo imobilizado, antes de salvar, abrirá a tela para preencher restante do cadastro do bem'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=422'
+            },
+            {
+                title: 'Importação dos Bens (Via Planilha)',
+                icon: '📊',
+                steps: [
+                    'Inserir o conjunto de dados no sistema',
+                    'Preencher planilha com os dados para cadastro dos bens',
+                    'Gerar em CSV separado por vírgulas',
+                    'Seguir passo a passo do link abaixo'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=9133'
+            },
+            {
+                title: 'Cálculo (Depreciação / CIAP / Crédito PIS e COFINS)',
+                icon: '🧮',
+                steps: [
+                    'Acesse Processos > Calcular',
+                    'Informe o período',
+                    'Clique em Calcular'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=484'
+            },
+            {
+                title: 'Relatório de Depreciação',
+                icon: '📈',
+                steps: [
+                    'Acesse Relatórios > Cálculo > Depreciação Fiscal'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=509'
+            },
+            {
+                title: 'Relatório CIAP',
+                icon: '📈',
+                steps: [
+                    'Acesse Relatórios > Crédito de ICMS > Ficha CIAP'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=512'
+            },
+            {
+                title: 'Relatório de Crédito PIS e COFINS',
+                icon: '📈',
+                steps: [
+                    'Acesse Relatórios > Crédito de PIS e COFINS'
+                ]
+            },
+            {
+                title: 'Baixa de Bens',
+                icon: '🗑️',
+                steps: [
+                    'Acesse Processos > Baixas',
+                    'Informe o código do bem',
+                    'Clique em [Incluir]',
+                    'Informe os dados da baixa'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=423'
+            },
+            {
+                title: 'Integração Escrita Fiscal - Crédito de ICMS',
+                icon: '🔗',
+                steps: [
+                    'Acesse Processos > Integração Escrita Fiscal > Crédito de ICMS'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=953'
+            },
+            {
+                title: 'Integração Escrita Fiscal - Crédito PIS e COFINS',
+                icon: '🔗',
+                steps: [
+                    'Acesse Processos > Integração Escrita Fiscal > Crédito de PIS e COFINS'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=1720'
+            },
+            {
+                title: 'Integração Contábil',
+                icon: '💼',
+                steps: [
+                    'Acesse Processos > Integração Contábil',
+                    'Informe o período',
+                    'Clique em Gerar'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=2714'
+            },
+            {
+                title: 'Bloqueio',
+                icon: '🔒',
+                steps: [
+                    'Acesse Controle > Fechamento',
+                    'No campo "Próximo Fechamento"',
+                    'Informe o mês a ser bloqueado'
+                ],
+                tutorial: 'https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=2304'
+            }
+        ];
+
+        function toggleCard(element, index) {
+            element.classList.toggle('expanded');
+        }
+
+        function openModal(index, event) {
+            event.stopPropagation();
+            const data = modalData[index];
+            document.getElementById('modalIcon').textContent = data.icon;
+            document.getElementById('modalTitle').textContent = data.title;
+            
+            let stepsHTML = '';
+            data.steps.forEach((step, i) => {
+                stepsHTML += `
+                    <div class="step">
+                        <div class="step-number">${i + 1}</div>
+                        <div class="step-content">
+                            <p class="step-text">${step}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (data.tutorial) {
+                stepsHTML += `
+                    <div class="tutorial-link">
+                        <a href="${data.tutorial}" target="_blank" class="tutorial-button">
+                            Ver Tutorial Completo
+                            <span>→</span>
+                        </a>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modalBody').innerHTML = stepsHTML;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal(event) {
+            if (event && event.target.id !== 'modal') return;
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
